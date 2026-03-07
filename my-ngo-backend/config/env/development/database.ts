@@ -1,9 +1,28 @@
-export default ({ env }) => ({
-  connection: {
-    client: 'postgres',
+import path from 'path'
+
+export default ({ env }) => {
+  const databaseUrl = env('DATABASE_URL')
+  if (databaseUrl)
+    return {
+      connection: {
+        client: 'postgres',
+        connection: {
+          connectionString: databaseUrl,
+        },
+        acquireConnectionTimeout: env.int('DATABASE_CONNECTION_TIMEOUT', 60000),
+      },
+    }
+
+  return {
+    client: 'sqlite',
     connection: {
-      connectionString: env('DATABASE_URL'),
+      filename: path.join(
+        __dirname,
+        '..',
+        '..',
+        env('DATABASE_FILENAME', '.tmp/data.db'),
+      ),
     },
-    acquireConnectionTimeout: env.int('DATABASE_CONNECTION_TIMEOUT', 60000),
-  },
-})
+    useNullAsDefault: true,
+  }
+}
