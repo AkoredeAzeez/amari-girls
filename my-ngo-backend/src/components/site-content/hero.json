@@ -23,12 +23,6 @@
     "headingLine2": {
       "type": "string"
     },
-    "headingLine3Desktop": {
-      "type": "string"
-    },
-    "headingLine3Mobile": {
-      "type": "string"
-    },
     "headingLine4": {
       "type": "string"
     },
@@ -49,6 +43,17 @@
       "type": "component",
       "component": "site-content.stats",
       "repeatable": true
+    },
+    "headingLine3Desktop": {
+      "type": "component",
+      "component": "site-content.headline",
+      "repeatable": false
+    },
+    "headingLine3Mobile": {
+      "type": "component",
+      "component": "site-content.headline",
+      "repeatable": false,
+      "required": false
     }
   },
   "config": {}

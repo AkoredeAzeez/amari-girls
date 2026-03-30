@@ -1,0 +1,19 @@
+{
+  "collectionName": "components_site_content_headlines",
+  "info": {
+    "displayName": "Headline",
+    "icon": "bold"
+  },
+  "options": {},
+  "attributes": {
+    "main": {
+      "type": "string",
+      "required": true
+    },
+    "accent": {
+      "type": "string",
+      "required": true
+    }
+  },
+  "config": {}
+}

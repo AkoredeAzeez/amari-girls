@@ -175,6 +175,18 @@ export interface SiteContentGalleryImage extends Struct.ComponentSchema {
   };
 }
 
+export interface SiteContentHeadline extends Struct.ComponentSchema {
+  collectionName: 'components_site_content_headlines';
+  info: {
+    displayName: 'Headline';
+    icon: 'bold';
+  };
+  attributes: {
+    accent: Schema.Attribute.String & Schema.Attribute.Required;
+    main: Schema.Attribute.String & Schema.Attribute.Required;
+  };
+}
+
 export interface SiteContentHero extends Struct.ComponentSchema {
   collectionName: 'components_site_content_heroes';
   info: {
@@ -186,8 +198,14 @@ export interface SiteContentHero extends Struct.ComponentSchema {
     ctaButtons: Schema.Attribute.Component<'site-content.cta-button', true>;
     headingLine1: Schema.Attribute.String;
     headingLine2: Schema.Attribute.String;
-    headingLine3Desktop: Schema.Attribute.String;
-    headingLine3Mobile: Schema.Attribute.String;
+    headingLine3Desktop: Schema.Attribute.Component<
+      'site-content.headline',
+      false
+    >;
+    headingLine3Mobile: Schema.Attribute.Component<
+      'site-content.headline',
+      false
+    >;
     headingLine4: Schema.Attribute.String;
     label: Schema.Attribute.String;
     socials: Schema.Attribute.Component<'site-content.social', true>;
@@ -422,6 +440,7 @@ declare module '@strapi/strapi' {
       'site-content.founder': SiteContentFounder;
       'site-content.gallery': SiteContentGallery;
       'site-content.gallery-image': SiteContentGalleryImage;
+      'site-content.headline': SiteContentHeadline;
       'site-content.hero': SiteContentHero;
       'site-content.mission-vision': SiteContentMissionVision;
       'site-content.navigation-bar': SiteContentNavigationBar;
