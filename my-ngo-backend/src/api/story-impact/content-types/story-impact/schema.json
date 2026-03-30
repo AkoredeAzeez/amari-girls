@@ -1,0 +1,42 @@
+{
+  "kind": "collectionType",
+  "collectionName": "story_impacts",
+  "info": {
+    "singularName": "story-impact",
+    "pluralName": "story-impacts",
+    "displayName": "Story/Impact"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "title": {
+      "type": "string",
+      "required": true
+    },
+    "excerpt": {
+      "type": "text",
+      "required": true
+    },
+    "body": {
+      "type": "text",
+      "required": true
+    },
+    "date": {
+      "type": "date",
+      "required": true
+    },
+    "beneficiary": {
+      "type": "component",
+      "component": "shared.beneficiary",
+      "repeatable": false
+    },
+    "program": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::program.program",
+      "inversedBy": "story_impacts"
+    }
+  }
+}

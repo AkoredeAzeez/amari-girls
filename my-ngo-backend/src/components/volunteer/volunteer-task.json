@@ -1,0 +1,15 @@
+{
+  "collectionName": "components_volunteer_volunteer_tasks",
+  "info": {
+    "displayName": "Volunteer Task",
+    "icon": "bulletList"
+  },
+  "options": {},
+  "attributes": {
+    "task": {
+      "type": "string",
+      "required": true
+    }
+  },
+  "config": {}
+}

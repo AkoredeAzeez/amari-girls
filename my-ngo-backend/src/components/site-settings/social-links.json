@@ -1,0 +1,23 @@
+{
+  "collectionName": "components_site_settings_social_links",
+  "info": {
+    "displayName": "Social Links",
+    "icon": "link"
+  },
+  "options": {},
+  "attributes": {
+    "facebook": {
+      "type": "string"
+    },
+    "instagram": {
+      "type": "string"
+    },
+    "twitter": {
+      "type": "string"
+    },
+    "youtube": {
+      "type": "string"
+    }
+  },
+  "config": {}
+}

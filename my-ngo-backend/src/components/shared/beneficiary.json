@@ -1,0 +1,20 @@
+{
+  "collectionName": "components_shared_beneficiaries",
+  "info": {
+    "displayName": "Beneficiary",
+    "icon": "handHeart"
+  },
+  "options": {},
+  "attributes": {
+    "name": {
+      "type": "string",
+      "required": true
+    },
+    "initials": {
+      "type": "string",
+      "required": true,
+      "regex": "[A-Z]+"
+    }
+  },
+  "config": {}
+}

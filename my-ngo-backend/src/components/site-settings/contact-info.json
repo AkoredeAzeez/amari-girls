@@ -1,0 +1,25 @@
+{
+  "collectionName": "components_site_settings_contact_infos",
+  "info": {
+    "displayName": "Contact Info",
+    "icon": "phone"
+  },
+  "options": {},
+  "attributes": {
+    "phones": {
+      "type": "component",
+      "component": "site-settings.phone-number",
+      "repeatable": true,
+      "required": true
+    },
+    "email": {
+      "type": "email",
+      "required": true
+    },
+    "location": {
+      "type": "string",
+      "required": true
+    }
+  },
+  "config": {}
+}

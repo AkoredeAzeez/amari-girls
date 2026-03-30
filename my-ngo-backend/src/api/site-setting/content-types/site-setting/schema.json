@@ -1,0 +1,31 @@
+{
+  "kind": "singleType",
+  "collectionName": "site_settings",
+  "info": {
+    "singularName": "site-setting",
+    "pluralName": "site-settings",
+    "displayName": "Site Settings"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "bankDetails": {
+      "type": "component",
+      "component": "site-settings.bank-details",
+      "repeatable": false,
+      "required": true
+    },
+    "contactInfo": {
+      "type": "component",
+      "component": "site-settings.contact-info",
+      "repeatable": false
+    },
+    "socialLinks": {
+      "type": "component",
+      "component": "site-settings.social-links",
+      "repeatable": false
+    }
+  }
+}
