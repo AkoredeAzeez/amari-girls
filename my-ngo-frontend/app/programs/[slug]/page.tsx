@@ -33,28 +33,28 @@ export default function ProgramDetailPage() {
 
   /* ── Auto-rotate gallery every 2 s ────────────────────────────────────── */
   useEffect(() => {
-    if (!program?.gallery || program.gallery.length <= 1) return;
+    if (!program?.gallery_items || program.gallery_items.length <= 1) return;
     const interval = setInterval(() => {
       setCurrentImageIndex((prev) =>
-        prev === program.gallery!.length - 1 ? 0 : prev + 1
+        prev === program.gallery_items!.length - 1 ? 0 : prev + 1
       );
     }, 2000);
     return () => clearInterval(interval);
-  }, [program?.gallery]);
+  }, [program?.gallery_items])
 
   const prevImage = useCallback(() => {
-    if (!program?.gallery) return;
+    if (!program?.gallery_items) return
     setCurrentImageIndex((prev) =>
-      prev === 0 ? program.gallery!.length - 1 : prev - 1
-    );
-  }, [program?.gallery]);
+      prev === 0 ? program.gallery_items!.length - 1 : prev - 1,
+    )
+  }, [program?.gallery_items])
 
   const nextImage = useCallback(() => {
-    if (!program?.gallery) return;
+    if (!program?.gallery_items) return
     setCurrentImageIndex((prev) =>
-      prev === program.gallery!.length - 1 ? 0 : prev + 1
-    );
-  }, [program?.gallery]);
+      prev === program.gallery_items!.length - 1 ? 0 : prev + 1,
+    )
+  }, [program?.gallery_items])
 
   /* ── States ────────────────────────────────────────────────────────────── */
   if (loading) {
@@ -91,8 +91,8 @@ export default function ProgramDetailPage() {
     );
   }
 
-  const heroImg = getStrapiImageUrl(program.heroImage?.url);
-  const gallery = program.gallery ?? [];
+  const heroImg = getStrapiImageUrl(program.heroImage?.url)
+  const gallery = program.gallery_items ?? []
 
   return (
     <div className="min-h-screen bg-off-white">

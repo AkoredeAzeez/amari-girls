@@ -30,7 +30,7 @@ export interface StrapiProgram {
   summary: string;
   body: string;
   heroImage?: { url: string };
-  gallery?: { url: string }[];
+  gallery_items?: { url: string }[];
   tags?: StrapiTag[];
   partners?: StrapiPartner[];
   story_impacts?: StrapiStoryImpact[];
@@ -40,7 +40,7 @@ export async function getAllPrograms(): Promise<StrapiProgram[]> {
   try {
     const url =
       `${STRAPI_BASE_URL}/api/programs` +
-      `?populate[]=heroImage&populate[]=gallery&populate[]=tags` +
+      `?populate[]=heroImage&populate[]=gallery_items&populate[]=tags` +
       `&populate[]=partners&populate[]=story_impacts`;
     const res = await fetch(url, { next: { revalidate: 60 } });
     if (!res.ok) return [];
