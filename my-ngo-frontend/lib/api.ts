@@ -3,15 +3,15 @@
    gracefully to hardcoded defaults when the backend is unreachable or
    a section is missing from the response.
 
-   Set  NEXT_PUBLIC_API_URL  in your .env  (or .env.local) to point at
-   the backend, e.g.  NEXT_PUBLIC_API_URL=https://api.amarigirlsfoundation.org
+   Set  NEXT_PUBLIC_STRAPI_URL  in your .env  (or .env.local) to point at
+   the backend, e.g.  NEXT_PUBLIC_STRAPI_URL=https://api.amarigirlsfoundation.org
    ────────────────────────────────────────────────────────────────────────── */
 
 import type { SiteContent } from './types'
 import defaults from './defaults'
 import { asRecord, asString, mapMediaToUrl, mapTextItems } from './normalizers'
 
-const API_BASE = process.env.NEXT_PUBLIC_API_URL ?? ''
+const API_BASE = process.env.NEXT_PUBLIC_STRAPI_URL ?? ''
 
 /* ── Section-level keys for safe merge ───────────────────────────────── */
 const SECTION_KEYS: (keyof SiteContent)[] = [
