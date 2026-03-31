@@ -186,16 +186,16 @@ export interface VolunteerCTAData {
 
 // ── Full site payload ───────────────────────────────────────────────────────
 export interface SiteContent {
-  navbar: NavbarData;
-  hero: HeroData;
-  founder: FounderData;
-  missionVision: MissionVisionData;
-  objectives: ObjectivesData;
-  communityProject: CommunityProjectData;
-  gallery: GalleryData;
-  testimonials: TestimonialsData;
-  partner: PartnerData;
-  board: BoardData;
-  contact: ContactData;
-  footer: FooterData;
+  navbar: Partial<NavbarData>;
+  hero: Partial<HeroData>;
+  founder: Partial<FounderData>;
+  missionVision: Partial<MissionVisionData>;
+  objectives: Partial<ObjectivesData>;
+  communityProject: Partial<CommunityProjectData>;
+  gallery: Partial<GalleryData>;
+  testimonials: Partial<TestimonialsData>;
+  partner: Partial<PartnerData>;
+  board: Partial<BoardData>;
+  contact: Partial<ContactData>;
+  footer: Partial<FooterData>;
 }

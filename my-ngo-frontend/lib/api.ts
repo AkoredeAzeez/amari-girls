@@ -7,7 +7,7 @@
    the backend, e.g.  NEXT_PUBLIC_STRAPI_URL=https://api.amarigirlsfoundation.org
    ────────────────────────────────────────────────────────────────────────── */
 
-import type { SiteContent } from './types'
+import type { HeroData, SiteContent, FounderData, ObjectivesData, CommunityProjectData, GalleryData, BoardData, TestimonialsData, ContactData } from './types'
 import defaults from './defaults'
 import { asRecord, asString, mapMediaToUrl, mapTextItems } from './normalizers'
 
@@ -29,7 +29,7 @@ const SECTION_KEYS: (keyof SiteContent)[] = [
   'footer',
 ]
 
-function normalizeHero(heroRaw: unknown): unknown {
+function normalizeHero(heroRaw: unknown): Partial<HeroData> {
   const hero = asRecord(heroRaw)
   const splitHeading = (value: unknown) => {
     const raw = asString(value).trim()
@@ -56,13 +56,96 @@ function normalizeHero(heroRaw: unknown): unknown {
     headingLine3Desktop:
       typeof hero.headingLine3Desktop === 'object' &&
       hero.headingLine3Desktop !== null
-        ? hero.headingLine3Desktop
+        ? hero.headingLine3Desktop as { main: string; accent: string }
         : splitHeading(hero.headingLine3Desktop),
     headingLine3Mobile:
       typeof hero.headingLine3Mobile === 'object' &&
       hero.headingLine3Mobile !== null
-        ? hero.headingLine3Mobile
+        ? hero.headingLine3Mobile as { main: string; accent: string }
         : splitHeading(hero.headingLine3Mobile),
+  }
+}
+
+function normalizeFounder(founderRaw: unknown): Partial<FounderData> {
+  const founder = asRecord(founderRaw)           
+  return {
+    ...founder,
+    image: mapMediaToUrl(founder.image),
+    bio: mapTextItems(founder.bio),
+  }
+}
+
+function normalizeObjectives(objectivesRaw: unknown): Partial<ObjectivesData> {
+  const objectives = asRecord(objectivesRaw)
+  return {
+    ...objectives,
+    items: mapTextItems(objectives.items),
+  }
+}
+
+function normalizeCommunityProject(projectRaw: unknown): Partial<CommunityProjectData> {
+  const project = asRecord(projectRaw)
+  return {
+    ...project,
+    image: mapMediaToUrl(project.image),
+    paragraphs: mapTextItems(project.paragraphs),
+  }
+}
+
+function normalizeGallery(galleryRaw: unknown): Partial<GalleryData> {
+  const gallery = asRecord(galleryRaw)
+  return {
+    ...gallery,
+    images: Array.isArray(gallery.images)
+      ? gallery.images.map((img) => {
+          const image = asRecord(img)
+          return {
+            src: mapMediaToUrl(image.image),
+            alt: asString(image.alt),
+          }
+        })
+      : [],
+  }
+}
+
+function normalizeBoard(boardRaw: unknown): Partial<BoardData> {
+  const board = asRecord(boardRaw)
+  return {
+    ...board,
+    members: Array.isArray(board.members)
+      ? board.members.map((m) => {
+          const member = asRecord(m)
+          return {
+            ...member,
+            image: mapMediaToUrl(member.image),
+          } as BoardData['members'][number]
+        })
+      : [],
+  }
+}
+
+function normalizeTestimonials(testimonialsRaw: unknown): Partial<TestimonialsData> {
+  const testimonials = asRecord(testimonialsRaw)
+  return {
+    ...testimonials,
+    items: Array.isArray(testimonials.items)
+      ? testimonials.items.map((t) => {
+          const item = asRecord(t)
+          return {
+            ...item,
+            image: mapMediaToUrl(item.image),
+          } as TestimonialsData['items'][number]
+        })
+      : [],
+  }
+}
+
+function normalizeContact(contactRaw: unknown): Partial<ContactData> {
+  const contact = asRecord(contactRaw)
+  return {
+    ...contact,
+    phones: mapTextItems(contact.phones),
+    socials: mapTextItems(contact.socials),
   }
 }
 
@@ -77,75 +160,56 @@ function normalizeSiteContentResponse(payload: unknown): Partial<SiteContent> {
       ? dataCandidate
       : root
 
-  const founder = asRecord(siteContent.founder)
-  const objectives = asRecord(siteContent.objectives)
-  const communityProject = asRecord(siteContent.communityProject)
-  const gallery = asRecord(siteContent.gallery)
-  const contact = asRecord(siteContent.contact)
-  const board = asRecord(siteContent.board)
-  const testimonials = asRecord(siteContent.testimonials)
+  const normalized: Partial<SiteContent> = {}
 
-  const normalized = {
-    ...siteContent,
-    hero: normalizeHero(siteContent.hero),
-    founder: {
-      ...founder,
-      image: mapMediaToUrl(founder.image),
-      bio: mapTextItems(founder.bio),
-    },
-    objectives: {
-      ...objectives,
-      items: mapTextItems(objectives.items),
-    },
-    communityProject: {
-      ...communityProject,
-      image: mapMediaToUrl(communityProject.image),
-      paragraphs: mapTextItems(communityProject.paragraphs),
-    },
-    gallery: {
-      ...gallery,
-      images: Array.isArray(gallery.images)
-        ? gallery.images.map((img) => {
-            const image = asRecord(img)
-            return {
-              src: mapMediaToUrl(image.image),
-              alt: asString(image.alt),
-            }
-          })
-        : [],
-    },
-    board: {
-      ...board,
-      members: Array.isArray(board.members)
-        ? board.members.map((m) => {
-            const member = asRecord(m)
-            return {
-              ...member,
-              image: mapMediaToUrl(member.image),
-            }
-          })
-        : [],
-    },
-    testimonials: {
-      ...testimonials,
-      items: Array.isArray(testimonials.items)
-        ? testimonials.items.map((t) => {
-            const item = asRecord(t)
-            return {
-              ...item,
-              image: mapMediaToUrl(item.image),
-            }
-          })
-        : [],
-    },
-    contact: {
-      ...contact,
-      phones: mapTextItems(contact.phones),
-      socials: mapTextItems(contact.socials),
-    },
+  // Only process sections that exist in the source data
+  if (siteContent.hero != null) {
+    normalized.hero = normalizeHero(siteContent.hero)
   }
 
-  return normalized as Partial<SiteContent>
+  if (siteContent.founder != null) {
+    normalized.founder = normalizeFounder(siteContent.founder)
+  }
+
+  if (siteContent.objectives != null) {
+    normalized.objectives = normalizeObjectives(siteContent.objectives)
+  }
+
+  if (siteContent.communityProject != null) {
+    normalized.communityProject = normalizeCommunityProject(siteContent.communityProject)
+  }
+
+  if (siteContent.gallery != null) {
+    normalized.gallery = normalizeGallery(siteContent.gallery)
+  }
+
+  if (siteContent.board != null) {
+    normalized.board = normalizeBoard(siteContent.board)
+  }
+
+  if (siteContent.testimonials != null) {
+    normalized.testimonials = normalizeTestimonials(siteContent.testimonials)
+  }
+
+  if (siteContent.contact != null) {
+    normalized.contact = normalizeContact(siteContent.contact)
+  }
+
+  // Copy navbar, missionVision, partner sections as-is if they exist
+  if (siteContent.navbar != null) {
+    normalized.navbar = siteContent.navbar
+  }
+  if (siteContent.missionVision != null) {
+    normalized.missionVision = siteContent.missionVision
+  }
+  if (siteContent.partner != null) {
+    normalized.partner = siteContent.partner
+  }
+  if (siteContent.footer != null) {
+    normalized.footer = siteContent.footer
+  }
+
+  return normalized
 }
 
 /* ── Image URL resolver ──────────────────────────────────────────────────
