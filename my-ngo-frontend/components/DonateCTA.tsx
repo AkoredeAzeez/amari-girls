@@ -1,5 +1,10 @@
+"use client";
+
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import { Heart, RefreshCw, Calendar, Gift } from "lucide-react";
+import { getSiteSettings, type StrapiSiteSettings } from "@/api/siteSettings";
+import defaults from "@/lib/defaults";
 
 const DONATION_OPTIONS = [
   {
@@ -32,6 +37,14 @@ const USAGE = [
 ];
 
 export default function DonateCTA() {
+  const [settings, setSettings] = useState<StrapiSiteSettings | null>(null);
+
+  useEffect(() => {
+    getSiteSettings().then((data) => {
+      setSettings(data);
+    });
+  }, []);
+
   return (
     <section id="donate-cta" className="py-20 bg-off-white">
       <div className="max-w-7xl mx-auto px-6 lg:px-10">
@@ -100,17 +113,20 @@ export default function DonateCTA() {
                 Bank Transfer
               </p>
               <p className="text-white font-black text-xs uppercase tracking-widest">
-                First Bank of Nigeria
+                {settings?.bankName || defaults.contact.bank!.bankName}
               </p>
               <p className="text-slate-muted text-xs mt-1">
-                Amari Girls Educational & Empowerment Foundation
+                {settings?.accountName || defaults.contact.bank!.accountName}
               </p>
               <p className="text-orange font-black text-lg mt-2 tracking-widest">
-                0123456789
+                {settings?.accountNumber || defaults.contact.bank!.accountNumber}
               </p>
               <p className="text-slate-muted text-xs mt-3 leading-relaxed">
-                All donations are tax-deductible. Please send your receipt to{" "}
-                <span className="text-orange">info@amarigirlsfoundation.org</span> for
+                {settings?.donateNote || defaults.contact.donateNote}
+              </p>
+              <p className="text-slate-muted text-xs mt-3 leading-relaxed">
+                Please send your receipt to{" "}
+                <span className="text-orange">{settings?.email || defaults.contact.email}</span> for
                 acknowledgement.
               </p>
             </div>

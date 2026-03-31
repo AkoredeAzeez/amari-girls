@@ -1,9 +1,11 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import { ArrowLeft, Mail, Phone, MapPin, CheckCircle } from "lucide-react";
 import { submitContactForm } from "@/api/submissions";
+import { getSiteSettings, type StrapiSiteSettings } from "@/api/siteSettings";
+import defaults from "@/lib/defaults";
 
 export default function ContactPage() {
   const [formData, setFormData] = useState({
@@ -14,6 +16,13 @@ export default function ContactPage() {
   });
   const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
   const [feedback, setFeedback] = useState("");
+  const [settings, setSettings] = useState<StrapiSiteSettings | null>(null);
+
+  useEffect(() => {
+    getSiteSettings().then((data) => {
+      setSettings(data);
+    });
+  }, []);
 
   function update(field: string, val: string) {
     setFormData((prev) => ({ ...prev, [field]: val }));
@@ -144,7 +153,7 @@ export default function ContactPage() {
                       Email
                     </p>
                     <p className="text-slate-muted text-xs">
-                      info@amarigirlsfoundation.org
+                      {settings?.email || defaults.contact.email}
                     </p>
                   </div>
                 </div>
@@ -156,8 +165,11 @@ export default function ContactPage() {
                     <p className="text-navy font-black text-xs uppercase tracking-widest mb-0.5">
                       Phone
                     </p>
-                    <p className="text-slate-muted text-xs">+234 800 000 0000</p>
-                    <p className="text-slate-muted text-xs">+234 800 000 0001</p>
+                    {(settings?.phones || defaults.contact.phones!).map((phone, idx) => (
+                      <p key={idx} className="text-slate-muted text-xs">
+                        {phone}
+                      </p>
+                    ))}
                   </div>
                 </div>
                 <div className="flex items-start gap-4">
@@ -168,7 +180,9 @@ export default function ContactPage() {
                     <p className="text-navy font-black text-xs uppercase tracking-widest mb-0.5">
                       Location
                     </p>
-                    <p className="text-slate-muted text-xs">Lagos, Nigeria</p>
+                    <p className="text-slate-muted text-xs">
+                      {settings?.location || defaults.contact.location}
+                    </p>
                   </div>
                 </div>
               </div>
@@ -179,13 +193,13 @@ export default function ContactPage() {
                 Bank Transfer
               </p>
               <p className="text-white font-black text-xs uppercase tracking-widest">
-                First Bank of Nigeria
+                {settings?.bankName || defaults.contact.bank!.bankName}
               </p>
               <p className="text-slate-muted text-xs mt-1">
-                Amari Girls Educational & Empowerment Foundation
+                {settings?.accountName || defaults.contact.bank!.accountName}
               </p>
               <p className="text-orange font-black text-xl mt-2 tracking-widest">
-                0123456789
+                {settings?.accountNumber || defaults.contact.bank!.accountNumber}
               </p>
             </div>
           </div>
