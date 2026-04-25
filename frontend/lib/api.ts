@@ -13,6 +13,20 @@ import { asRecord, asString, mapMediaToUrl, mapTextItems } from './normalizers'
 
 const API_BASE = process.env.NEXT_PUBLIC_STRAPI_URL ?? ''
 
+const SITE_CONTENT_POPULATE_QUERY =
+  'populate[navbar][populate]=*' +
+  '&populate[hero][populate]=*' +
+  '&populate[founder][populate]=*' +
+  '&populate[missionVision][populate]=*' +
+  '&populate[objectives][populate]=*' +
+  '&populate[communityProject][populate]=*' +
+  '&populate[gallery][populate][images][populate]=*' +
+  '&populate[testimonials][populate][items][populate]=*' +
+  '&populate[partner][populate]=*' +
+  '&populate[board][populate][members][populate]=*' +
+  '&populate[contact][populate]=*' +
+  '&populate[footer][populate]=*'
+
 /* ── Section-level keys for safe merge ───────────────────────────────── */
 const SECTION_KEYS: (keyof SiteContent)[] = [
   'navbar',
@@ -233,7 +247,9 @@ export async function fetchSiteContent(): Promise<SiteContent> {
   }
 
   try {
-    const res = await fetch(`${API_BASE}/api/site-content`, {
+    const res = await fetch(
+      `${API_BASE}/api/site-content?${SITE_CONTENT_POPULATE_QUERY}`,
+      {
       next: { revalidate: 60 }, // ISR — re-fetch every 60 s
     })
 

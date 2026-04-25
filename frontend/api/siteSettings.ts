@@ -1,6 +1,11 @@
 import { STRAPI_BASE_URL } from './strapi'
 import { asRecord, asString } from '@/lib/normalizers'
 
+const SITE_SETTINGS_POPULATE_QUERY =
+  'populate[bankDetails][populate]=*' +
+  '&populate[contactInfo][populate][phones][populate]=*' +
+  '&populate[socialLinks][populate]=*'
+
 export interface StrapiSiteSettings {
   /** Bank transfer details */
   bankName: string
@@ -54,7 +59,7 @@ function normalizeSiteSettings(raw: unknown): StrapiSiteSettings | null {
 export async function getSiteSettings(): Promise<StrapiSiteSettings | null> {
   try {
     const res = await fetch(
-      `${STRAPI_BASE_URL}/api/site-setting`, // Strapi single types use singular slug
+      `${STRAPI_BASE_URL}/api/site-setting?${SITE_SETTINGS_POPULATE_QUERY}`, // Strapi single types use singular slug
       { next: { revalidate: 60 } },
     )
     if (!res.ok) return null
